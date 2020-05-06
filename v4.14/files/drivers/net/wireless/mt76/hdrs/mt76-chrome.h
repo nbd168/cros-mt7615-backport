@@ -125,6 +125,33 @@ int __alloc_bucket_spinlocks(spinlock_t **locks, unsigned int *lock_mask,
 	})
 void free_bucket_spinlocks(spinlock_t *locks);
 
+#if LINUX_VERSION_IS_LESS(4, 17, 0)
+
+#define sg_init_marker LINUX_BACKPORT(sg_init_marker)
+/**
+ * sg_init_marker - Initialize markers in sg table
+ * @sgl:	   The SG table
+ * @nents:	   Number of entries in table
+ *
+ **/
+static inline void sg_init_marker(struct scatterlist *sgl,
+				  unsigned int nents)
+{
+#ifdef CONFIG_DEBUG_SG
+	unsigned int i;
+
+	for (i = 0; i < nents; i++)
+		sgl[i].sg_magic = SG_MAGIC;
+#endif
+	sg_mark_end(&sgl[nents - 1]);
+}
+
+#endif /* LINUX_VERSION_IS_LESS(4, 17, 0) */
+
+#if LINUX_VERSION_IS_LESS(4,18,0)
+#define firmware_request_nowarn(fw, name, device) request_firmware(fw, name, device)
+#endif
+
 #if LINUX_VERSION_IS_LESS(4,19,0)
 #ifndef atomic_fetch_add_unless
 static inline int atomic_fetch_add_unless(atomic_t *v, int a, int u)
@@ -159,7 +186,5 @@ backport_pci_disable_link_state(struct pci_dev *pdev, int state)
 
 #endif /* < 5.3 */
 #endif /* defined(CONFIG_PCI) */
-
-
 
 #endif /* __MT76_CHROME */
