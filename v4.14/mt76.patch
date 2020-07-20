@@ -2,11 +2,13 @@ diff --git a/chromeos/config/x86_64/chromeos-intel-pineview.flavour.config b/chr
 index b41028f6fefd..a032a4026bb7 100644
 --- a/chromeos/config/x86_64/chromeos-intel-pineview.flavour.config
 +++ b/chromeos/config/x86_64/chromeos-intel-pineview.flavour.config
-@@ -24,6 +24,7 @@ CONFIG_INTEL_RAPL=y
+@@ -24,6 +24,9 @@ CONFIG_INTEL_RAPL=y
  CONFIG_INTEL_SOC_DTS_THERMAL=y
  CONFIG_INTEL_TELEMETRY=y
  CONFIG_IWL7000=m
 +CONFIG_MT7615E=m
++CONFIG_MT7663S=m
++CONFIG_MT7663U=m
  CONFIG_MEDIA_CONTROLLER=y
  # CONFIG_MEDIA_SUBDRV_AUTOSELECT is not set
  CONFIG_MFD_INTEL_LPSS_ACPI=y

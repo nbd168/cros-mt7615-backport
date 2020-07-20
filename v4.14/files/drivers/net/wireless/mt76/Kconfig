@@ -8,7 +8,37 @@ config MT76_LEDS
 	depends on LEDS_CLASS=y || MT76_CORE=LEDS_CLASS
 	default y
 
+config MT76_USB
+	tristate
+	default m
+
+config MT76_SDIO
+	tristate
+	default m
+
+config MT7615_COMMON
+	tristate
+
 config MT7615E
-	tristate "MT7615 driver backport"
+	tristate "MediaTek MT7615E and MT7663E (PCIe) support"
 	select MT76_CORE
+	select MT7615_COMMON
+	depends on m
+
+config MT7663_USB_SDIO_COMMON
+	tristate
+	select MT7615_COMMON
+
+config MT7663U
+	tristate "MediaTek MT7663U (USB) support"
+	select MT76_USB
+	select MT7663_USB_SDIO_COMMON
+	depends on USB
+	depends on m
+
+config MT7663S
+	tristate "MediaTek MT7663S (SDIO) support"
+	select MT76_SDIO
+	select MT7663_USB_SDIO_COMMON
+	depends on MMC
 	depends on m

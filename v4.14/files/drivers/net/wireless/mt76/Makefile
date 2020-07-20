@@ -18,8 +18,15 @@ subdir-ccflags-y += $(call cc-option,-Wno-unused-variable)
 
 obj-$(CONFIG_MT76_CORE) += mac80211/
 obj-$(CONFIG_MT76_CORE) += mt76.o
+obj-$(CONFIG_MT76_USB) += mt76-usb.o
+obj-$(CONFIG_MT76_SDIO) += mt76-sdio.o
 obj-$(CONFIG_MT7615E) += mt7615/
 
 mt76-y := \
 	mmio.o util.o trace.o dma.o mac80211.o debugfs.o eeprom.o \
-	tx.o agg-rx.o mcu.o airtime.o pci.o
+	tx.o agg-rx.o mcu.o airtime.o
+mt76-$(CONFIG_PCI) += pci.o
+mt76-$(CONFIG_NL80211_TESTMODE) += testmode.o
+
+mt76-usb-y := usb.o usb_trace.o
+mt76-sdio-y := sdio.o

@@ -7,16 +7,10 @@
  * Copyright (C) 2018      Intel Corporation
  */
 
+#include <hdrs/mac80211-exp.h>
 #include <linux/version.h>
 #include <linux/types.h>
-#include <linux/errno.h>
-#include <linux/idr.h>
-#include <linux/vmalloc.h>
-
-/* get the CPTCFG_* preprocessor symbols */
-#include <hdrs/config.h>
-
-#include <hdrs/mac80211-exp.h>
+#include <linux/compiler.h>
 
 /* include rhashtable this way to get our copy if another exists */
 #include <linux/list_nulls.h>
@@ -25,6 +19,15 @@
 #endif
 #include "linux/rhashtable.h"
 
+#include <linux/errno.h>
+#include <linux/idr.h>
+#include <linux/vmalloc.h>
+
+/* get the CPTCFG_* preprocessor symbols */
+#include <hdrs/config.h>
+
+
+#include <linux/kthread.h>
 #include <net/genetlink.h>
 #include <linux/crypto.h>
 #include <linux/moduleparam.h>
@@ -35,6 +38,8 @@
 #include <linux/pci-aspm.h>
 #include <linux/if_vlan.h>
 #include <linux/overflow.h>
+#include <linux/mmc/sdio_func.h>
+#include <linux/mmc/sdio_ids.h>
 
 #define LINUX_VERSION_IS_LESS(x1,x2,x3) (LINUX_VERSION_CODE < KERNEL_VERSION(x1,x2,x3))
 #define LINUX_VERSION_IS_GEQ(x1,x2,x3)  (LINUX_VERSION_CODE >= KERNEL_VERSION(x1,x2,x3))
@@ -161,6 +166,11 @@ static inline int atomic_fetch_add_unless(atomic_t *v, int a, int u)
 #endif
 #endif /* LINUX_VERSION_IS_LESS(4,19,0) */
 
+#if LINUX_VERSION_IS_LESS(5,2,0)
+#define nla_parse_deprecated nla_parse
+#define nla_parse_nested_deprecated nla_parse_nested
+#endif
+
 #if defined(CONFIG_PCI)
 #if LINUX_VERSION_IS_LESS(5,3,0)
 
@@ -186,5 +196,15 @@ backport_pci_disable_link_state(struct pci_dev *pdev, int state)
 
 #endif /* < 5.3 */
 #endif /* defined(CONFIG_PCI) */
+
+#ifndef SDIO_VENDOR_ID_MEDIATEK
+#define SDIO_VENDOR_ID_MEDIATEK 0x037a
+#endif
+
+#ifndef module_sdio_driver
+#define module_sdio_driver(__sdio_driver) \
+	module_driver(__sdio_driver, sdio_register_driver, \
+		      sdio_unregister_driver)
+#endif
 
 #endif /* __MT76_CHROME */
