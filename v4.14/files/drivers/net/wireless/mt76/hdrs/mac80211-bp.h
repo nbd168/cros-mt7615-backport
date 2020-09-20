@@ -1125,3 +1125,15 @@ bool cfg80211_iftype_allowed(struct wiphy *wiphy, enum nl80211_iftype iftype,
 #ifndef IEEE80211_AQL_THRESHOLD
 #define IEEE80211_AQL_THRESHOLD         24000
 #endif
+
+
+#if CFG80211_VERSION < KERNEL_VERSION(5,9,0)
+#include <uapi/linux/sched/types.h>
+
+static inline void sched_set_fifo_low(struct task_struct *p)
+{
+	struct sched_param sparam = {.sched_priority = 1};
+
+	sched_setscheduler(p, SCHED_FIFO, &sparam);
+}
+#endif
