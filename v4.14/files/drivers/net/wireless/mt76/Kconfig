@@ -17,6 +17,7 @@ config MT76_SDIO
 	default m
 
 config MT7615_COMMON
+	select MT76_CORE
 	tristate
 
 config MT7615E
