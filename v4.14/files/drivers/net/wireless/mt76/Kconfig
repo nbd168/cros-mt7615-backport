@@ -22,6 +22,7 @@ config MT7615_COMMON
 config MT7615E
 	tristate "MediaTek MT7615E and MT7663E (PCIe) support"
 	select MT76_CORE
+	depends on PCI
 	select MT7615_COMMON
 	depends on m
 

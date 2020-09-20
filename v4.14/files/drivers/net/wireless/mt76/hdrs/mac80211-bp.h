@@ -24,6 +24,12 @@
 #define RHEL_RELEASE_CODE 0
 #define RHEL_RELEASE_VERSION(a,b) 1
 
+#ifndef fallthrough
+#define fallthrough /* fall through */
+#endif
+
+#define netif_threaded_napi_add netif_napi_add
+
 #ifndef netdev_alloc_pcpu_stats
 #define netdev_alloc_pcpu_stats(type)				\
 ({								\
@@ -476,6 +482,7 @@ struct ieee80211_sband_iftype_data {
 	u16 types_mask;
 	struct ieee80211_sta_he_cap he_cap;
 };
+#endif
 
 #if CFG80211_VERSION < KERNEL_VERSION(5,3,0)
 /**
@@ -485,6 +492,7 @@ struct ieee80211_sband_iftype_data {
  * Return: pointer to the struct ieee80211_sta_he_cap, or NULL is none found
  *	Currently, not supported
  */
+#define ieee80211_get_he_sta_cap backport_ieee80211_get_he_sta_cap
 static inline const struct ieee80211_sta_he_cap *
 ieee80211_get_he_sta_cap(const struct ieee80211_supported_band *sband)
 {
@@ -497,7 +505,6 @@ ieee80211_get_he_iftype_cap(const struct ieee80211_supported_band *sband,
 {
 	return NULL;
 }
-#endif
 
 /**
  * struct ieee80211_he_obss_pd - AP settings for spatial reuse
@@ -1088,6 +1095,7 @@ static inline void cfg80211_bss_iter(struct wiphy *wiphy,
 	 */
 }
 
+#define cfg80211_iftype_allowed backport_cfg80211_iftype_allowed
 static inline
 bool cfg80211_iftype_allowed(struct wiphy *wiphy, enum nl80211_iftype iftype,
 			     bool is_4addr, u8 check_swif)

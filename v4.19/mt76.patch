@@ -1,0 +1,32 @@
+diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
+index f37d7fe404df..979e451664ad 100644
+--- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
++++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
+@@ -56,6 +56,8 @@ CONFIG_MEDIATEK_WATCHDOG=y
+ CONFIG_MEDIA_CONTROLLER_REQUEST_API=y
+ # CONFIG_MEDIA_SUBDRV_AUTOSELECT is not set
+ CONFIG_MMC_MTK=y
++CONFIG_MT7663S=m
++CONFIG_MT7663U=m
+ CONFIG_MTD_MT81xx_NOR=y
+ CONFIG_MTK_CMDQ=y
+ CONFIG_MTK_CMDQ_DEBUG=y
+diff --git a/drivers/net/wireless/Kconfig b/drivers/net/wireless/Kconfig
+index 9a92cbc73134..335ecb917453 100644
+--- a/drivers/net/wireless/Kconfig
++++ b/drivers/net/wireless/Kconfig
+@@ -115,4 +115,5 @@ config USB_NET_RNDIS_WLAN
+ 	  If you choose to build a module, it'll be called rndis_wlan.
+ 
+ source "drivers/net/wireless/iwl7000/Kconfig"
++source "drivers/net/wireless/mt76/Kconfig"
+ endif # WLAN
+diff --git a/drivers/net/wireless/Makefile b/drivers/net/wireless/Makefile
+index 90df3cea4846..3238d507b05f 100644
+--- a/drivers/net/wireless/Makefile
++++ b/drivers/net/wireless/Makefile
+@@ -28,3 +28,4 @@ obj-$(CONFIG_USB_NET_RNDIS_WLAN)	+= rndis_wlan.o
+ 
+ obj-$(CONFIG_MAC80211_HWSIM)	+= mac80211_hwsim.o
+ obj-$(CONFIG_IWL7000) += iwl7000/
++obj-$(CONFIG_MT76_CORE) += mt76/
