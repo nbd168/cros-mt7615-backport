@@ -30,7 +30,7 @@ copy_kernel() {
 		echo "Chromium OS v$ver kernel not found in '$CROS'"
 		exit 1
 	fi
-	if grep -q MT7615E "$CROS/$CONFIG"; then
+	if grep -qE '(MT7615E|MT7663S)' "$CROS/$CONFIG"; then
 		echo "Build patch already applied"
 	else
 		patch -d "$CROS" -p1 < ./v$ver/mt76.patch
