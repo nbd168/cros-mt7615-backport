@@ -1044,6 +1044,8 @@ void ieee80211_tx_status_ext(struct ieee80211_hw *hw,
 	noack_success = !!(info->flags & IEEE80211_TX_STAT_NOACK_TRANSMITTED);
 
 	if (pubsta) {
+		struct ieee80211_sub_if_data *sdata = sta->sdata;
+
 		if (!acked && !noack_success)
 			sta->status_stats.retry_failed++;
 		sta->status_stats.retry_count += retry_count;
@@ -1057,6 +1059,13 @@ void ieee80211_tx_status_ext(struct ieee80211_hw *hw,
 
 				/* Track when last packet was ACKed */
 				sta->status_stats.last_pkt_time = jiffies;
+
+				/* Reset connection monitor */
+				if (sdata->vif.type == NL80211_IFTYPE_STATION &&
+				    unlikely(sdata->u.mgd.probe_send_count > 0)) {
+					sdata->u.mgd.probe_send_count = 0;
+					ieee80211_queue_work(&local->hw, &sdata->work);
+				}
 
 				if (info->status.is_valid_ack_signal) {
 					sta->status_stats.last_ack_signal =
